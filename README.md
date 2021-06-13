@@ -136,7 +136,7 @@ Wanna contribute to the project? Great! Please follow the next steps in order to
 <!-- LICENSE -->
 ## License
 
-Distributed under the GPL-3.0 License. See `LICENSE` for more information.
+Distributed under the AGPL-3.0 License. See `LICENSE` for more information.
 
 
 
