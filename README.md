@@ -11,7 +11,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![GPL 3.0 License][license-shield]][license-url]
+[![AGPL 3.0 License][license-shield]][license-url]
 [![Telegram][telegram-shield]][telegram-url]
 
 
