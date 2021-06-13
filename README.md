@@ -19,7 +19,7 @@
 <!-- PROJECT LOGO -->
 <br />
 
-  <h3 align="center">Universal Proxy Scraper BETA v 0.0.3</h3>
+  <h3 align="center">Universal Proxy Scraper BETA v 0.1.0</h3>
 
   <p align="center">
     Need some proxys but don't want to scrap them manually?, just give this script the domain!
@@ -146,6 +146,14 @@ Distributed under the AGPL-3.0 License. See `LICENSE` for more information.
 Telegram: - [@freshSauce](https://t.me/freshSauce)
 
 Project Link: [https://github.com/freshSauce/UniversalProxyScraper](https://github.com/freshSauce/UniversalProxyScraper)
+
+<!-- CHANGELOG -->
+
+### Changelog
+
+#### 0.1.0
+* Added proxy checker [function](https://github.com/freshSauce/UniversalProxyScraper/blob/637c16177f49128fde203a2a066453cb778a93b7/main.py#L192)
+* Fixed some typos on the script documentation.
 
 
 
