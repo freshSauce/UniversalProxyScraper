@@ -147,13 +147,13 @@ class ProxyScraper:
         list[str] : 
             List with every proxy obtained from the scraped data.
         """
-
         pattern = r'<tbody>.*<\/tbody>'
+        try:
+            table_body = re.search(pattern, html).group()
+        except AttributeError:
+            table_body = re.search(pattern, html.replace('\n', '')).group()
 
-        table_body = re.search(pattern, html).group()
-        
-
-        pattern = r'<tr>.*?<\/tr>'
+        pattern = r'<tr.*?<\/tr>'
 
         table_rows = list(re.finditer(pattern, table_body))
 
@@ -161,9 +161,13 @@ class ProxyScraper:
 
         for row in table_rows:
             elements_raw = re.findall(r'<td.*?<\/td>', row.group())
-            elements = [re.sub(r'<.*?>', '', element) for element in elements_raw]
+            elements = [re.sub(r'<.*?>', '', element).strip() for element in elements_raw]
 
-            ip, port = elements[0], elements[1]
+            try:
+                ip, port = elements[0], elements[1]
+
+            except IndexError:
+                continue
 
             if 'decode' in ip or 'decode' in port:
                 ip = re.sub(r'(.*[^=\w\d]\")|(\"\).*)', '', ip)
@@ -184,7 +188,10 @@ class ProxyScraper:
 
                         port_raw = urllib.parse.unquote(port)
                         port = re.sub(r'<.*?>', port_raw)
-                
+
+            if 'write' in ip or 'write' in port:
+                ip = re.sub(r'(.*\(\')|(\'\);)', '', ip)
+                port = re.sub(r'(.*\(\')|(\'\);)', '', port)
             proxy_list.append(f'{ip}:{port}')
         
         return proxy_list
@@ -269,7 +276,6 @@ class ProxyScraper:
 
         
         return proxies
-
 
 if __name__ == '__main__':
     proxies = ProxyScraper('test_urls.txt', check=True).Proxies()
