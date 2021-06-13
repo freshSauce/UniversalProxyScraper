@@ -39,7 +39,7 @@
 [![Module][example-script]](https://github.com/freshSauce/UniversalProxyScraper/)
 
 ### Output
-[![Output][example-script]](https://github.com/freshSauce/UniversalProxyScraper/)
+[![Output][example-output]](https://github.com/freshSauce/UniversalProxyScraper/)
 
 Hi there! The purpose of this script is to demonstrate the power and the functions that will be implemented in the future module of Universal Proxy Scraper, at first, this will be developed until the v 1.0.0 came out, that version will be the first version deployed as module :)
 
