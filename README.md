@@ -165,5 +165,5 @@ Project Link: [https://github.com/freshSauce/UniversalProxyScraper](https://gith
 [license-url]: https://github.com/freshSauce/UniversalProxyScraper/blob/master/LICENSE.txt
 [telegram-shield]: https://img.shields.io/badge/-@freshSauce-black?style=for-the-badge&logo=telegram&colorB=0af
 [telegram-url]: https://t.me/freshSauce
-[example-script]: images/example-script.png
-[example-output]: images/example-output.png
+[example-script]: images/example_script.png
+[example-output]: images/example_output.png
