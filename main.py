@@ -11,7 +11,8 @@ class ProxyScraper:
     def __init__(
                 self, 
                 file: str, 
-                output: str = None
+                output: bool = None,
+                check: bool = None
                 ) -> None:
 
         """
@@ -19,13 +20,16 @@ class ProxyScraper:
         ----------
         file : str
             The name of the file with the sites
-        output : str, optional
+        output : bool, optional
             In case that the user needs the output he can store it
-            on a filem, in format: <file_name>.txt
+            on a file named 'output.txt'.
+        check : bool, optional
+            Used to check if the proxy is alive or not.
         """
 
         self.file = file
         self.output = output
+        self.check = check
         self.headers = {
                         'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.0 Safari/532.5'
                         }
@@ -83,7 +87,7 @@ class ProxyScraper:
         Return
         -------
         str :
-            Constains all the data collected by the scrape.
+            Contains the HTML code obtained.
         """
 
         request = urllib3.PoolManager()
@@ -184,6 +188,28 @@ class ProxyScraper:
             proxy_list.append(f'{ip}:{port}')
         
         return proxy_list
+    
+    def __checker(self, proxy: str) -> bool:
+        """
+        Parameters
+        ----------
+        proxy : str
+            Proxy that will be checked
+
+        Return
+        ------
+        bool :
+            It will return True/False whether the proxy is alive or not
+        """
+        request = urllib3.ProxyManager(f'http://{proxy}/')
+
+        try:
+            result = request.request('GET', 'https://httpbin.org/get', timeout=1.5)
+            return True
+        except (urllib3.exceptions.ProxyError, urllib3.exceptions.MaxRetryError):
+             return False
+
+           
 
 
     def Proxies(
@@ -209,26 +235,42 @@ class ProxyScraper:
 
         html_content_list = self.__poolCreator(urls)
 
-        proxy_list = list()
+        proxies = list()
         for html in html_content_list:
-            proxies = self.__scrape(html)
-            proxy_list += proxies
+            proxy_list = self.__scrape(html)
+            proxies += proxy_list
             
-        if quantity > len(proxy_list):
-            if self.output:
-                self.__saveFile(proxy_list)
-            return proxy_list
+        if quantity > len(proxies):
+            if self.output == True:
+                self.__saveFile(proxies)
+
+            if self.check == True:
+                proxies = list()
+                for proxy in proxy_list:
+                    if self.__checker(proxy):
+                        proxies.append(proxy)
 
         else:
-            proxies = list()
+            _proxies = list()
             for _ in range(quantity):
-                proxy = choice(proxy_list)
-                if proxy not in proxies:
-                    proxies.append(proxy)
-            if self.output:
-                self.__saveFile(proxies)
-            return proxies
+                proxy = choice(proxies)
+                if proxy not in _proxies:
+                    _proxies.append(proxy)
+            if self.output == True:
+                self.__saveFile(_proxies)
+            
+            if self.check == True:
+                proxies = list()
+                for proxy in _proxies:
+                    if self.__checker(proxy):
+                        proxies.append(proxy)
+
+            proxies = _proxies
+
+        
+        return proxies
 
 
 if __name__ == '__main__':
-    ProxyScraper('test_urls.txt').Proxies()
+    proxies = ProxyScraper('test_urls.txt', check=True).Proxies()
+    print(proxies)
