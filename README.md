@@ -19,7 +19,7 @@
 <!-- PROJECT LOGO -->
 <br />
 
-  <h3 align="center">Universal Proxy Scraper BETA v 0.1.0</h3>
+  <h3 align="center">Universal Proxy Scraper BETA v 0.1.1</h3>
 
   <p align="center">
     Need some proxys but don't want to scrap them manually?, just give this script the domain!
@@ -152,6 +152,10 @@ Project Link: [https://github.com/freshSauce/UniversalProxyScraper](https://gith
 <!-- CHANGELOG -->
 
 ### Changelog
+
+#### 0.1.1
+* Added support to some sites with JS-based write, such as: 'document.write'.
+* Added handlers for some exceptions.
 
 #### 0.1.0
 * Added proxy checker [function](https://github.com/freshSauce/UniversalProxyScraper/blob/637c16177f49128fde203a2a066453cb778a93b7/main.py#L192)
