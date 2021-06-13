@@ -3,6 +3,7 @@ import re
 import urllib
 import concurrent.futures
 import base64
+from random import choice
 
 class ProxyScraper:
     HTML = str
@@ -62,9 +63,10 @@ class ProxyScraper:
         ------
         None
         """
-        if self.output != None:
+        if self.output:
+            proxies = [proxy + '\n' for proxy in proxy_list]
             with open('output.txt', 'w') as output:
-               output.writelines(proxy_list) 
+               output.writelines(proxies) 
         else:
             pass
     
@@ -211,11 +213,21 @@ class ProxyScraper:
         for html in html_content_list:
             proxies = self.__scrape(html)
             proxy_list += proxies
-        
+            
         if quantity > len(proxy_list):
+            if self.output:
+                self.__saveFile(proxy_list)
             return proxy_list
+
         else:
-            return proxy_list[0:quantity]
+            proxies = list()
+            for _ in range(quantity):
+                proxy = choice(proxy_list)
+                if proxy not in proxies:
+                    proxies.append(proxy)
+            if self.output:
+                self.__saveFile(proxies)
+            return proxies
 
 
 if __name__ == '__main__':
