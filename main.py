@@ -25,6 +25,9 @@ class ProxyScraper:
 
         self.file = file
         self.output = output
+        self.headers = {
+                        'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.0 Safari/532.5'
+                        }
 
     def __openFile(self) -> list[str]:
         """
@@ -40,8 +43,7 @@ class ProxyScraper:
 
         except FileNotFoundError:
             exit(
-                f'An error ocurred while trying to open file {self.file},',
-                'please, make sure you typed correctly your file\'s name'
+                f'An error ocurred while trying to open file {self.file}, please, make sure you typed correctly your file\'s name'
                 )
             
 
@@ -83,8 +85,18 @@ class ProxyScraper:
         """
 
         request = urllib3.PoolManager()
+        
+        try:
+            result = request.request(
+                                        'GET', 
+                                        url, 
+                                        timeout=1.5,
+                                        headers=self.headers
+                                    )
 
-        result = request.request('GET', url)
+        except urllib3.exceptions.MaxRetryError:
+            print(f'Connection to {url.strip()} timed out ')
+            return False
 
         if result.status == 200:
             return result.data.decode('utf-8')
@@ -112,7 +124,8 @@ class ProxyScraper:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             thread_list = [executor.submit(self.__doRequest, url) for url in urls]
             for result in concurrent.futures.as_completed(thread_list):
-                html_list.append(result)
+                if result.result():
+                    html_list.append(result.result())
             
         return html_list
 
@@ -132,6 +145,7 @@ class ProxyScraper:
         pattern = r'<tbody>.*<\/tbody>'
 
         table_body = re.search(pattern, html).group()
+        
 
         pattern = r'<tr>.*?<\/tr>'
 
@@ -141,7 +155,7 @@ class ProxyScraper:
 
         for row in table_rows:
             elements_raw = re.findall(r'<td.*?<\/td>', row.group())
-            elements = [re.sub(r'<.*?>', element) for element in elements_raw]
+            elements = [re.sub(r'<.*?>', '', element) for element in elements_raw]
 
             ip, port = elements[0], elements[1]
 
@@ -188,6 +202,9 @@ class ProxyScraper:
         """
         urls = self.__openFile()
 
+        if not urls:
+            exit(f'File {self.file} is empty.')
+
         html_content_list = self.__poolCreator(urls)
 
         proxy_list = list()
@@ -201,4 +218,5 @@ class ProxyScraper:
             return proxy_list[0:quantity]
 
 
-    
+if __name__ == '__main__':
+    ProxyScraper('test_urls.txt').Proxies()
