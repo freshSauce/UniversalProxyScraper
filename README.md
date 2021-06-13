@@ -116,6 +116,8 @@ proxy_list = ProxyScraper('test_urls.txt').Proxies() # Will save the proxies lis
 ProxyScraper('test_urls.txt', output=True).Proxies() # Will save the output into an output file
 
 proxy_list = ProxyScraper('test_urls.txt').Proxies(quantity=15) # Will save 15 of the scraped proxies into a variable (10 by default)
+
+proxy_list = ProxyScraper('test_urls.txt', check=True).Proxies(quantity=15) # Will save 15 of the scraped proxies and will check each one of them
 ```
 
 Hope it is useful for you!
