@@ -19,7 +19,7 @@
 <!-- PROJECT LOGO -->
 <br />
 
-  <h3 align="center">Universal Proxy Scraper BETA v 0.0.2</h3>
+  <h3 align="center">Universal Proxy Scraper BETA v 0.0.3</h3>
 
   <p align="center">
     Need some proxys but don't want to scrap them manually?, just give this script the domain!
