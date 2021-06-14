@@ -3,6 +3,7 @@ import re
 import urllib
 import concurrent.futures
 import base64
+from specific.spys_one import Deofuscator
 from random import choice
 
 class ProxyScraper:
@@ -105,7 +106,7 @@ class ProxyScraper:
             return False
 
         if result.status == 200:
-            return result.data.decode('utf-8')
+            return {'html': result.data.decode('utf-8'), 'site': url.strip()}
 
         else:
             return False
@@ -135,7 +136,7 @@ class ProxyScraper:
             
         return html_list
 
-    def __scrape(self, html: HTML) -> list[str]:
+    def __scrape(self, html: HTML, site: str) -> list[str]:
         """
         Parameters
         ----------
@@ -147,6 +148,41 @@ class ProxyScraper:
         list[str] : 
             List with every proxy obtained from the scraped data.
         """
+        if 'spys' in site:
+            pattern = r'<table.*width=\"65%\"[\w\W]*?<\/table>'
+            table_body = re.search(pattern, html.strip()).group()
+
+            pattern = r'<tr.*?<\/tr>'
+
+            table_rows = list(re.finditer(pattern, table_body))
+
+            proxy_list = list()
+
+            script = re.search(r'eval.*', html).group() 
+            pattern = r'\(\'[\w].+?\}\)'
+
+            variables_raw = re.search(pattern, script).group() 
+
+            variables = variables_raw.lstrip('(').rstrip(')').replace('\\u005e', '^').split(',')
+
+            p, r, o, x, y, s = variables[0].replace("'", ''), variables[1], variables[2], variables[3], variables[4], variables[5]
+
+            for row in table_rows[2:]:
+                elements_raw = re.findall(r'<td.*?<\/td>', row.group())
+                elements = [re.sub(r'<.*?>', '', element).strip() for element in elements_raw]
+
+                ip_port_cleaned = re.sub(r'(\'&nbsp;)|(\)\')|', '', elements[0])
+
+                ip_port_splited = re.split(r'document\.write\(\":\"\+', ip_port_cleaned)
+
+                ip, port = ip_port_splited[0].replace('&nbsp;', ''), ip_port_splited[1]
+
+                port = Deofuscator(p, r, o, x, y, s).deofuscator(port)
+
+                proxy_list.append(f'{ip}:{port}')
+
+            return proxy_list
+
         pattern = r'<tbody>.*<\/tbody>'
         try:
             table_body = re.search(pattern, html).group()
@@ -244,7 +280,7 @@ class ProxyScraper:
 
         proxies = list()
         for html in html_content_list:
-            proxy_list = self.__scrape(html)
+            proxy_list = self.__scrape(html['html'], html['site'])
             proxies += proxy_list
             
         if quantity > len(proxies):
