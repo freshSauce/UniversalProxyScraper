@@ -19,7 +19,7 @@
 <!-- PROJECT LOGO -->
 <br />
 
-  <h3 align="center">Universal Proxy Scraper BETA v 0.1.1</h3>
+  <h3 align="center">Universal Proxy Scraper BETA v 0.1.2</h3>
 
   <p align="center">
     Need some proxys but don't want to scrap them manually?, just give this script the domain!
@@ -152,6 +152,13 @@ Project Link: [https://github.com/freshSauce/UniversalProxyScraper](https://gith
 <!-- CHANGELOG -->
 
 ### Changelog
+
+#### 0.1.2
+* Added support to the first specific site: spys.one.
+
+Now, I want to say that, if needed, I will create specific scripts for specific sites, this doesn't mean that I won't keep looking for an 'universal' solution, is just that sites like that one are pretty much different from the others.
+
+[Module](https://github.com/freshSauce/UniversalProxyScraper/blob/d4e274b185e5710492439622e57041dd76d41b21/specific/spys_one.py) created for that site.
 
 #### 0.1.1
 * Added support to some sites with JS-based write, such as: 'document.write'.
