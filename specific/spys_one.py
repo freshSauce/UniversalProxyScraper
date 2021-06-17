@@ -4,6 +4,16 @@ digs = string.digits + string.ascii_letters
 
 class Deofuscator:
     def __init__(self, p, r, o, x, y, s) -> None:
+        """
+        Parameters
+        ----------
+        p, r, o, x, y, s : str
+            Data that will be used for proxy's ports deofuscation
+
+        Return
+        ------
+        None : None
+        """
         self.p = p
         self.r= int(r)
         self.o = int(o)

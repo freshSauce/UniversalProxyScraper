@@ -5,6 +5,43 @@ import concurrent.futures
 import base64
 from specific.spys_one import Deofuscator
 from random import choice
+import argparse
+
+logo = '''
+██╗   ██╗   ██████╗ ███████╗    █████╗  ██████╗ 
+██║   ██║   ██╔══██╗██╔════╝██╗██╔══██╗██╔═████╗
+██║   ██║   ██████╔╝███████╗╚═╝╚█████╔╝██║██╔██║
+██║   ██║   ██╔═══╝ ╚════██║██╗██╔══██╗████╔╝██║
+╚██████╔╝██╗██║██╗  ███████║╚═╝╚█████╔╝╚██████╔╝
+ ╚═════╝ ╚═╝╚═╝╚═╝  ╚══════╝    ╚════╝  ╚═════╝ 
+                                                
+            Proxy
+Universal           Scraper | Your ideal proxy scraper ;)
+       by: @freshSauce
+           0.1.5
+'''
+
+
+def __ArgsBuilder():
+    """
+    This function works as the builder of the args that 
+    """
+    parser = argparse.ArgumentParser(description='Command-line option for the Universal Scraper')
+
+    parser.add_argument('-f', '--file', type=str, action='store', required=True,
+                    help='name of the file with the sites')
+    parser.add_argument('-o', '--output', action='store_true',
+                    help='if used, stores the scraped proxies')
+    parser.add_argument('-q', '--quantity', type=int, action='store', default=10,
+                    help='if used, stores the scraped proxies')
+    parser.add_argument('-v', '--verify', action='store_true',
+                    help='if used, verify every single proxy and returns the live ones')
+    parser.add_argument('-p', '--print', action='store_true',
+                    help='if used, prints out the obtained list of proxies')
+
+    args = vars(parser.parse_args())
+
+    return args
 
 class ProxyScraper:
     HTML = str
@@ -314,5 +351,25 @@ class ProxyScraper:
         return proxies
 
 if __name__ == '__main__':
-    proxies = ProxyScraper('test_urls.txt', check=True).Proxies()
-    print(proxies)
+
+    print(logo)
+    args = __ArgsBuilder()
+
+    while True:
+        result = ProxyScraper(args['file'], args['output'], args['verify']).Proxies(args['quantity'])
+        print('Proxies obtained !!!')
+        
+        if args['print']:
+            print(result)
+        while True:
+            option = input('Everything is done !!! Wanna get more proxies? (Y[es]/N[o]): ').lower()
+
+            if option == 'y' or option == 'yes':
+                break
+                    
+            elif option == 'n' or option == 'no':
+                exit('Have a nice day !!!')
+
+            else:
+                print('Please, use Y[es]/N[o] only !!!')
+            
