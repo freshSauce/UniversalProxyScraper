@@ -347,7 +347,6 @@ class ProxyScraper:
 
             proxies = _proxies
 
-        
         return proxies
 
 if __name__ == '__main__':
