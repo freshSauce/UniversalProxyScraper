@@ -22,7 +22,19 @@ class Deofuscator:
         self.s = eval(s)
         
 
-    def int2base(self, x, base):
+    def int2base(self, x: int, base: int) -> chr:
+        '''
+        Parameters
+        ----------
+        x : int
+            x is a given int that is used to get the char
+        base : int
+            # to be writted
+        
+        Return
+        ------
+        chr : chr
+        '''
         if x < 0:
             sign = -1
         elif x == 0:
