@@ -19,7 +19,7 @@
 <!-- PROJECT LOGO -->
 <br />
 
-  <h3 align="center">Universal Proxy Scraper BETA v 0.1.2</h3>
+  <h3 align="center">Universal Proxy Scraper BETA v 0.1.5</h3>
 
   <p align="center">
     Need some proxys but don't want to scrap them manually?, just give this script the domain!
@@ -70,6 +70,73 @@ https://hidemy.name/es/proxy-list/#list
 ```
 
 (For a better reference see the test_urls.txt that is in this same repository).
+
+### Using via command-line
+
+The usage of command line is pretty simple :D Ex.
+```
+path/to/the/script: python main.py -h
+
+
+██╗   ██╗   ██████╗ ███████╗    █████╗  ██████╗
+██║   ██║   ██╔══██╗██╔════╝██╗██╔══██╗██╔═████╗
+██║   ██║   ██████╔╝███████╗╚═╝╚█████╔╝██║██╔██║
+██║   ██║   ██╔═══╝ ╚════██║██╗██╔══██╗████╔╝██║
+╚██████╔╝██╗██║██╗  ███████║╚═╝╚█████╔╝╚██████╔╝
+ ╚═════╝ ╚═╝╚═╝╚═╝  ╚══════╝    ╚════╝  ╚═════╝
+
+            Proxy
+Universal           Scraper | Your ideal proxy scraper ;)
+       by: @freshSauce
+           0.1.5
+
+usage: main.py [-h] -f FILE [-o] [-q QUANTITY] [-v] [-p]
+
+Command-line option for the Universal Scraper
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  name of the file with the sites
+  -o, --output          if used, stores the scraped proxies
+  -q QUANTITY, --quantity QUANTITY
+                        if used, stores the scraped proxies
+  -v, --verify          if used, verify every single proxy and returns the live ones
+  -p, --print           if used, prints out the obtained list of proxies
+
+
+```
+
+As you may see, there's a lot of options you can use :)
+
+* file (required, value needed) : path or name of the file that contains all the webistes you want to scrape.
+* output (optional, no value needed) : if used, writes a file named "output.txt" with every single scraped proxy. 
+* quantity (optional, value needed, 10 by default) : it declares the quantity of proxies to be scraped.
+* verify (optional, no value needed) : if used, verifys every single proxy scraped, and returns the list with those that are alive.
+* print (optional, no value needed) : if used, prints out the list that contains all the proxies.
+
+##### Example with every single argument
+
+```
+path/to/the/script: python main.py -f test_urls.txt -p -o -v -q 5
+
+██╗   ██╗   ██████╗ ███████╗    █████╗  ██████╗
+██║   ██║   ██╔══██╗██╔════╝██╗██╔══██╗██╔═████╗
+██║   ██║   ██████╔╝███████╗╚═╝╚█████╔╝██║██╔██║
+██║   ██║   ██╔═══╝ ╚════██║██╗██╔══██╗████╔╝██║
+╚██████╔╝██╗██║██╗  ███████║╚═╝╚█████╔╝╚██████╔╝
+ ╚═════╝ ╚═╝╚═╝╚═╝  ╚══════╝    ╚════╝  ╚═════╝
+
+            Proxy
+Universal           Scraper | Your ideal proxy scraper ;)
+       by: @freshSauce
+           0.1.5
+
+Connection to http://free-proxy.cz/es/ timed out
+Proxies obtained !!!
+['172.67.181.214:80', '172.67.80.190:80', '45.82.139.34:4443', '188.168.56.82:55443', '150.129.54.111:6667']
+Everything is done !!! Wanna get more proxies? (Y[es]/N[o]): n
+Have a nice day !!!
+```
 
 #### Setting up our code
 
@@ -152,6 +219,9 @@ Project Link: [https://github.com/freshSauce/UniversalProxyScraper](https://gith
 <!-- CHANGELOG -->
 
 ### Changelog
+
+#### 0.1.5
+* Added command-line support (yeah, no 0.1.3 nor 0.1.4, heh)
 
 #### 0.1.2
 * Added support to the first specific site: spys.one.
