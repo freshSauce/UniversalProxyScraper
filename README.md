@@ -19,7 +19,7 @@
 <!-- PROJECT LOGO -->
 <br />
 
-  <h3 align="center">Universal Proxy Scraper BETA v 0.1.5</h3>
+  <h3 align="center">Universal Proxy Scraper BETA v 0.1.6</h3>
 
   <p align="center">
     Need some proxys but don't want to scrap them manually?, just give this script the domain!
@@ -88,7 +88,7 @@ path/to/the/script: python main.py -h
             Proxy
 Universal           Scraper | Your ideal proxy scraper ;)
        by: @freshSauce
-           0.1.5
+           0.1.6
 
 usage: main.py [-h] -f FILE [-o] [-q QUANTITY] [-v] [-p]
 
@@ -129,7 +129,7 @@ path/to/the/script: python main.py -f test_urls.txt -p -o -v -q 5
             Proxy
 Universal           Scraper | Your ideal proxy scraper ;)
        by: @freshSauce
-           0.1.5
+           0.1.6
 
 Connection to http://free-proxy.cz/es/ timed out
 Proxies obtained !!!
@@ -219,6 +219,9 @@ Project Link: [https://github.com/freshSauce/UniversalProxyScraper](https://gith
 <!-- CHANGELOG -->
 
 ### Changelog
+
+#### 0.1.6
+* Added custom exceptions plus minor changes.
 
 #### 0.1.5
 * Added command-line support (yeah, no 0.1.3 nor 0.1.4, heh)
