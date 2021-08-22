@@ -1,8 +1,10 @@
+from typing import Union
 import urllib3
 import re
 import urllib
 import concurrent.futures
 import base64
+from exceptions import *
 from specific.spys_one import Deofuscator
 from random import choice
 import argparse
@@ -48,7 +50,7 @@ class ProxyScraper:
 
     def __init__(
                 self, 
-                file: str, 
+                input: Union[str, list], 
                 output: bool = None,
                 check: bool = None
                 ) -> None:
@@ -65,7 +67,7 @@ class ProxyScraper:
             Used to check if the proxy is alive or not.
         """
 
-        self.file = file
+        self.input = input
         self.output = output
         self.check = check
         self.headers = {
@@ -81,12 +83,12 @@ class ProxyScraper:
             In case the file doesn't exists, an exception is raised.
         """
         try:
-            with open(self.file, 'r') as sites:
+            with open(self.input, 'r') as sites:
                 return sites.readlines()
 
         except FileNotFoundError:
             exit(
-                f'An error ocurred while trying to open file {self.file}, please, make sure you typed correctly your file\'s name'
+                f'An error ocurred while trying to open file {self.input}, please, make sure you typed correctly your file\'s name'
                 )
             
 
@@ -185,9 +187,12 @@ class ProxyScraper:
         list[str] : 
             List with every proxy obtained from the scraped data.
         """
-        if 'spys' in site:
+        if 'https://spys.one/en' == site:
             pattern = r'<table.*width=\"65%\"[\w\W]*?<\/table>'
-            table_body = re.search(pattern, html.strip()).group()
+            try:
+                table_body = re.search(pattern, html.strip()).group()
+            except AttributeError:
+                raise InternalError("Whoops! Seems like something wrong happened. Please, open an Issue including the URLs your're trying to scrape!")
 
             pattern = r'<tr.*?<\/tr>'
 
@@ -284,7 +289,7 @@ class ProxyScraper:
         request = urllib3.ProxyManager(f'http://{proxy}/')
 
         try:
-            result = request.request('GET', 'https://httpbin.org/get', timeout=1.5)
+            request.request('GET', 'https://httpbin.org/get', timeout=1.5)
             return True
         except (urllib3.exceptions.ProxyError, urllib3.exceptions.MaxRetryError):
              return False
@@ -308,10 +313,12 @@ class ProxyScraper:
         list[str] :
             List with every proxy scraped.
         """
-        urls = self.__openFile()
+        urls = self.__openFile() if type(self.input) == "str" else self.input
 
         if not urls:
-            exit(f'File {self.file} is empty.')
+            raise ArgumentNotProvided(
+                                        "Whoops! seems like you've forgot to provide the URLs !!!"
+                                    )
 
         html_content_list = self.__poolCreator(urls)
 
