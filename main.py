@@ -6,7 +6,7 @@ import concurrent.futures
 import base64
 from exceptions import *
 from specific.spys_one import Deofuscator
-from random import choice
+from random import shuffle
 import argparse
 
 logo = '''
@@ -175,7 +175,7 @@ class ProxyScraper:
             
         return html_list
 
-    def __scrape(self, html: HTML, site: str) -> list[str]:
+    def __scrape(self, html: HTML, site: str, quantity: int) -> list[str]:
         """
         Parameters
         ----------
@@ -210,6 +210,8 @@ class ProxyScraper:
             p, r, o, x, y, s = variables[0].replace("'", ''), variables[1], variables[2], variables[3], variables[4], variables[5]
 
             for row in table_rows[2:]:
+                if len(proxy_list) == quantity*1.5:
+                    break
                 elements_raw = re.findall(r'<td.*?<\/td>', row.group())
                 elements = [re.sub(r'<.*?>', '', element).strip() for element in elements_raw]
 
@@ -238,6 +240,8 @@ class ProxyScraper:
         proxy_list = list()
 
         for row in table_rows:
+            if len(proxy_list) == quantity*1.5:
+                break
             elements_raw = re.findall(r'<td.*?<\/td>', row.group())
             elements = [re.sub(r'<.*?>', '', element).strip() for element in elements_raw]
 
@@ -290,11 +294,10 @@ class ProxyScraper:
 
         try:
             request.request('GET', 'https://httpbin.org/get', timeout=1.5)
-            return True
+            return {"live": True, "proxy": proxy}
         except (urllib3.exceptions.ProxyError, urllib3.exceptions.MaxRetryError):
-             return False
+            return {"live": False, "proxy": proxy}
 
-           
 
 
     def Proxies(
@@ -326,35 +329,23 @@ class ProxyScraper:
         for html in html_content_list:
             proxy_list = self.__scrape(html['html'], html['site'])
             proxies += proxy_list
-            
-        if quantity > len(proxies):
-            if self.output == True:
-                self.__saveFile(proxies)
 
-            if self.check == True:
-                proxies = list()
-                for proxy in proxy_list:
-                    if self.__checker(proxy):
-                        proxies.append(proxy)
+        # Check proxies in parallel
+        if self.check == True:
+            liveProxies = list()
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                results = executor.map(self.__checker, proxies)
+                for result in results:
+                    if result["live"] == True:
+                        liveProxies.append(result["proxy"])
+            proxies = liveProxies
 
-        else:
-            _proxies = list()
-            for _ in range(quantity):
-                proxy = choice(proxies)
-                if proxy not in _proxies:
-                    _proxies.append(proxy)
-            if self.output == True:
-                self.__saveFile(_proxies)
-            
-            if self.check == True:
-                proxies = list()
-                for proxy in _proxies:
-                    if self.__checker(proxy):
-                        proxies.append(proxy)
-
-            proxies = _proxies
-
+        # Append the quantity of proxies that will be returned
+        if quantity < len(proxies):
+            shuffle(proxies)
+            proxies = proxies[:quantity]
         return proxies
+
 
 if __name__ == '__main__':
 
