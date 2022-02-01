@@ -378,6 +378,10 @@ class ProxyScraper:
         if self.outpute:
             self.__saveFile(proxies)
 
+        # Append the quantity of proxies that will be returned
+        if quantity < len(proxies):
+            shuffle(proxies)
+            proxies = proxies[:quantity]
         return proxies
 
 
